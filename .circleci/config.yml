@@ -10,6 +10,10 @@ jobs:
       - run:
           name: Install dependencies
           command: yarn install --pure-lockfile
+      - save_cache:
+          key: deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
       - run:
           name: Run tests
           command: make test
@@ -18,10 +22,6 @@ jobs:
       - run:
           name: Run coverage
           command: yarn codecov
-      - save_cache:
-          key: deps-{{ checksum "yarn.lock" }}
-          paths:
-            - node_modules
   publish:
     docker:
       - image: circleci/node:8
